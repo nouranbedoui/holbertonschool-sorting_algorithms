@@ -1,1 +1,1 @@
-C - Sorting algorithms & Big O
+Sorting algorithms Big O
