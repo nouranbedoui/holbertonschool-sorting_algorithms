@@ -1,71 +1,85 @@
+
 #include "sort.h"
 
+
 /**
- * lomuto_partition - Lomuto partition scheme for quick sort
- * @array: array to be sorted
- * @low: starting index of the partition
- * @high: ending index of the partition
- * @size: size of the array (for printing)
- * Return: index of the pivot
+ * swapp- swaps two values in an array
+ * @array: data to sort
+ * @a: first value
+ * @b: second value
+ * @size: size of data
+ * Return: void
  */
-int lomuto_partition(int *array, int low, int high, size_t size)
+void swapp(int *array, int a, int b, int size)
 {
-int i = low - 1;
-int j, temp;
+	int temp;
 
-for (j = low; j < high; j++)
-{
-if (array[j] < array[high])
-{
-i++;
-if (i != j)
-{
-temp = array[i];
-array[i] = array[j];
-array[j] = temp;
-print_array(array, size);
-}
-}
-}
-
-if (i + 1 != high)
-{
-temp = array[i + 1];
-array[i + 1] = array[high];
-array[high] = temp;
-print_array(array, size);
-}
-
-return (i + 1);
+	if (array[a] != array[b])
+	{
+		temp = array[a];
+		array[a] = array[b];
+		array[b] = temp;
+		print_array(array, size);
+	}
 }
 
 /**
- * quick_sort_recursive - Recursively apply quick sort
- * @array: array to be sorted
- * @low: starting index of the partition
- * @high: ending index of the partition
- * @size: size of the array (for printing)
+ * partition - sorts a partition of data in relation to a pivot
+ * @array: data to sort
+ * @min: Left wall
+ * @max: right wall
+ * @size: size of data
+ * Return: New Pivot
  */
-void quick_sort_recursive(int *array, int low, int high, size_t size)
+int partition(int *array, int min, int max, size_t size)
 {
-if (low < high)
-{
-int pivot_index = lomuto_partition(array, low, high, size);
+	int i = min, j, piv = array[max];
 
-quick_sort_recursive(array, low, pivot_index - 1, size);
-quick_sort_recursive(array, pivot_index + 1, high, size);
-}
+	for (j = min; j <= max; j++)
+	{
+		if (array[j] < piv)
+		{
+			swapp(array, i, j, size);
+			i++;
+		}
+
+	}
+	swapp(array, i, max, size);
+
+	return (i);
 }
 
 /**
- * quick_sort - Quick sort algorithm using Lomuto partition scheme
- * @array: array to be sorted
- * @size: size of the array
+ * q_sort - Quick sort algorithm
+ * @array: data to sort
+ * @min: Left wall
+ * @max: right wall
+ * @size: size of data
+ *
+ * Return: No Return
+ */
+void q_sort(int *array, int min, int max, size_t size)
+{
+	int i;
+
+	if (min < max)
+	{
+		i = partition(array, min, max, size);
+		q_sort(array, min, i - 1, size);
+		q_sort(array, i + 1, max, size);
+	}
+}
+
+/**
+ * quick_sort -  Quick sort algorithme
+ * @array: data to sort
+ * @size: size of data
+ * Return: No Return
  */
 void quick_sort(int *array, size_t size)
 {
-if (array == NULL || size < 2)
-return;
+	if (size < 2)
+		return;
 
-quick_sort_recursive(array, 0, size - 1, size);
+	q_sort(array, 0, size - 1, size);
 }
